@@ -155,6 +155,12 @@
                                     <span class="nav-link-text">{{ __('Feedback') }}</span>
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url('/QnA') }}">
+                                    <i class="fas fa-comments text-primary" title="{{ __('Pertanyaan Customer') }}"></i>
+                                    <span class="nav-link-text">{{ __('QnA') }}</span>
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </li>
