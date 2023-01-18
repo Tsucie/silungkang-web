@@ -204,25 +204,29 @@ function createOrd(obj) {
   while (no_telp.includes('-')) {
     no_telp = no_telp.replace('-','');
   }
+  let nama_gedung = $(obj+' input[id="input-sewa-namagedung"]').val();
+  let nama_tamu = $(obj+' input[id="input-sewa-nama"]').val();
+  let tanggal_pemakaian = $(obj+' input[id="input-sewa-tanggal"]').val();
+  let waktu_pemakaian = $('#input-sewa-waktu').val();
   let tipe_waktu = parseInt($('#title-vnu-page').attr('data_time'));
   let dari_jam = $(obj + ' input[id="dari_jam"]').val();
   let sampai_jam = $(obj + ' input[id="sampai_jam"]').val();
-  console.log(dari_jam, sampai_jam);
+  // console.log(dari_jam, sampai_jam);
   var formData = new FormData();
   formData.append("cst_id", id);
   formData.append("ov_vnu_id", parseInt($(obj+' input[id="vnu_id"]').val()));
-  formData.append("ov_vnu_nama", $(obj+' input[id="input-sewa-namagedung"]').val());
+  formData.append("ov_vnu_nama", nama_gedung);
   formData.append("ov_no_telp", "Khairul Hasan : 0812 8109 8822 & Nurul : 0895 6367 50473");
-  formData.append("gst_nama", $(obj+' input[id="input-sewa-nama"]').val());
+  formData.append("gst_nama", nama_tamu);
   formData.append("gst_alamat", $(obj+' input[id="input-sewa-alamat"]').val());
   formData.append("gst_no_telp", no_telp.charAt(0) === '0' ? no_telp : no_telp.charAt(0) === '+' ? no_telp : '+62 '+no_telp);
-  formData.append("gst_rencana_pemakaian", $(obj+' input[id="input-sewa-tanggal"]').val());
+  formData.append("gst_rencana_pemakaian", tanggal_pemakaian);
 
   if (tipe_waktu == 1) {
-    formData.append("waktu_sewa", parseInt($('#input-sewa-waktu').val()));
-    formData.append("gst_waktu_pemakaian", "Jam: " + dari_jam + " - " + sampai_jam + " ("+$('#input-sewa-waktu').val()+" Jam)");
+    formData.append("waktu_sewa", parseInt(waktu_pemakaian));
+    formData.append("gst_waktu_pemakaian", "Jam: " + dari_jam + " - " + sampai_jam + " ("+waktu_pemakaian+" Jam)");
   } else {
-    formData.append("gst_waktu_pemakaian", $('#input-sewa-waktu').val());
+    formData.append("gst_waktu_pemakaian", waktu_pemakaian);
   }
 
   if ($(obj+' input[id="input-sewa-keperluan"]').val() != "")
@@ -250,6 +254,25 @@ function createOrd(obj) {
 				EnableBtn('#input-sewa-submit','Book Now');
 		}
 	});
+
+  // Send notifikasi ke admin
+  let admin = "rizkyadji21@gmail.com";
+  let message = "Notifikasi Pemesanan Venue \n\n "+nama_tamu+" telah melakukan pemesanan gedung untuk tanggal "+tanggal_pemakaian+" "+waktu_pemakaian+". \n Harap cek detail dan proses pemesanan pada aplikasi dashboard Silungkang. \n\n Terimakasih.";
+  let url = "http://localhost/silungkang-bot/sendMessage.php";
+  $.ajax({
+    url: url,
+    type: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    dataType: 'json',
+    data: JSON.stringify({
+      "email": admin,
+      "message": message
+    }),
+  }).done(function (response) {
+    console.log(response);
+  });
 }
 
 //-- Review API --//

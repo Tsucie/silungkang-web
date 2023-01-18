@@ -446,3 +446,8 @@ function EnableBtn(selector, btnName = '') {
 }
 
 var validatePass = (pass, cpass) => (pass === cpass);
+
+function sendTelegramNotif(email, message)
+{
+  
+}
